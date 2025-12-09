@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Contagem para te ver, meu amor 💖</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Poppins', sans-serif;
+        background: #000;
+        overflow: hidden;
+    }
+
+    /* Vídeo de fundo */
+    video#bgVideo {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        transform: translate(-50%, -50%);
+        filter: brightness(50%) blur(4px);
+        object-fit: cover;
+        z-index: -3;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        z-index: -2;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 40px;
+        border-radius: 20px;
+        backdrop-filter: blur(8px);
+        color: #fff;
+        text-align: center;
+        max-width: 500px;
+        position: relative; /* LIMITA O BOTÃO */
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    #contador {
+        font-size: 1.7rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    #frase {
+        font-size: 1.1rem;
+        font-style: italic;
+        margin-bottom: 25px;
+    }
+
+    /* Botões */
+    .botoes {
+        margin-top: 20px;
+    }
+
+.pergunta {
+    text-align: center;
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding: 40px;
+
+    border-radius: 20px;
+    position: relative; /* ESSENCIAL */
+    overflow: hidden;   /* impede o botão de sair visualmente */
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    background: #ff4f81;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+#nao {
+    position: absolute;
+    left: 200x; /* posição inicial dentro da pergunta */
+    top: 100px;  /* posição inicial dentro da pergunta */
+    background: #fff;
+    color: #ff4d79;
+    transform: none; /* remover transform para não conflitar com JS */
+}
+
+
+#sim {
+    position: absolute;
+    left: 80px;  /* ajuste para alinhamento inicial */
+    top: 100px;  /* mesma altura do botão "não" */
+    background: #ff4d79;
+    color: #fff;
+}
+
+
+    #sim:hover {
+        background: #ff305f;
+        position: absolute;
+    }
+
+  
+
+    /* Tela de vídeo */
+    #videoContainer {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.9);
+        z-index: 10;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #videoContainer video {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 15px;
+        box-shadow: 0 0 20px #ff4d79;
+    }
+    #fecharVideo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background: #ff4d79;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 15;
+}
+
+#fecharVideo:hover {
+    background: #ff305f;
+}
+
+</style>
+</head>
+
+<body>
+
+<video id="bgVideo" autoplay muted loop>
+    <source src="fundo.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="container">
+    <h1>💖 Falta pouco para te ver, meu amor 💖</h1>
+
+    <div id="contador">Carregando...</div>
+
+    <div id="frase"></div>
+
+    <div class="pergunta">
+        <h2>Quer matar a saudade?</h2>
+        <button id="sim">Sim ❤️</button>
+        <button id="nao">Não 😢</button>
+    </div>
+
+</div>
+
+</div>
+
+<!-- Vídeo quando clicar em sim -->
+<div id="videoContainer">
+    <video id="meuVideo" controls autoplay>
+        <source src="meu_video.mp4" type="video/mp4">
+    </video>
+    <button id="fecharVideo">Fechar ❌</button>
+</div>
+
+<script>
+// ===========================
+// CONTADOR
+// ===========================
+const dataEncontro = new Date("2026-01-01T13:00:00");
+
+function atualizarContador() {
+    const agora = new Date().getTime();
+    const alvo = dataEncontro.getTime();
+    const diferenca = alvo - agora;
+
+    if (diferenca <= 0) {
+        document.getElementById("contador").innerHTML =
+            "É HOJE, MEU AMOR!!! 😍❤️";
+        return;
+    }
+
+    const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+    const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+    document.getElementById("contador").innerHTML =
+        `${dias} dias<br>${horas} horas<br>${minutos} minutos<br>${segundos} segundos 💕`;
+}
+
+setInterval(atualizarContador, 1000);
+atualizarContador();
+
+
+// ===========================
+// FRASES ROMÂNTICAS
+// ===========================
+const frasesBase = [
+    "Cada segundo longe de você é saudade acumulada… 💗",
+    "Quanto mais perto do dia, mais meu coração pula… 🥺❤️",
+    "Eu conto as horas pra sentir teu abraço… 🤍",
+    "Você é minha ansiedade boa… 🌹",
+    "Eu te amo mais do que consigo explicar… 💞"
+];
+
+
+const container = document.querySelector(".pergunta");
+const btnNao = document.getElementById("nao");
+const btnSim = document.getElementById("sim");
+
+function fugir(e) {
+    const containerRect = container.getBoundingClientRect();
+    const btnRect = btnNao.getBoundingClientRect();
+
+    const mouseX = e.clientX - containerRect.left;
+    const mouseY = e.clientY - containerRect.top;
+
+    const distancia = 80;
+
+    const btnX = btnNao.offsetLeft + btnRect.width / 2;
+    const btnY = btnNao.offsetTop + btnRect.height / 2;
+
+    const dx = mouseX - btnX;
+    const dy = mouseY - btnY;
+
+    if (Math.abs(dx) < distancia && Math.abs(dy) < distancia) {
+        const maxX = container.clientWidth - btnRect.width;
+        const maxY = container.clientHeight - btnRect.height;
+
+        let novaX = Math.random() * maxX;
+        let novaY = Math.random() * maxY;
+
+        btnNao.style.left = novaX + "px";
+        btnNao.style.top = novaY + "px";
+    }
+}
+
+btnNao.addEventListener("mousemove", fugir);
+btnNao.addEventListener("mouseenter", fugir);
+
+btnSim.addEventListener("click", () => {
+    document.getElementById("videoContainer").style.display = "flex";
+    document.getElementById("meuVideo").play();
+});
+
+const videoContainer = document.getElementById("videoContainer");
+const meuVideo = document.getElementById("meuVideo");
+const fecharVideo = document.getElementById("fecharVideo");
+fecharVideo.addEventListener("click", () => {
+    meuVideo.pause();
+    meuVideo.currentTime = 0;
+
+    videoContainer.style.display = "none";
+
+    const container = document.querySelector(".container");
+    container.style.opacity = 1;  // 🔥 e pronto!
+});
+const fraseContainer = document.getElementById("frase");
+
+function atualizarFrase() {
+    const agora = new Date().getTime();
+    const alvo = dataEncontro.getTime();
+    const diferenca = alvo - agora;
+
+    const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+
+    const frases = [
+        `Só mais ${horas} horas e ${minutos} minutos e eu vou te abraçar 💗`,
+        "Contando os segundos… 😍",
+        "Cada momento longe é só pra te valorizar mais 💞",
+        "Meu coração bate mais rápido só de pensar em você 💖"
+    ];
+
+    const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
+    fraseContainer.innerHTML = fraseAleatoria;
+}
+
+setInterval(atualizarFrase, 12000);
+atualizarFrase();
+
+btnSim.addEventListener("click", () => {
+    const container = document.querySelector(".container");
+
+    container.style.transition = "opacity 0.8s";
+    container.style.opacity = 0;
+
+    setTimeout(() => {
+        videoContainer.style.display = "flex";
+        videoContainer.style.opacity = 1;
+        meuVideo.play();
+    }, 800);
+});
+</script>
+
+
+</body>
+</html>
